@@ -1,0 +1,23 @@
+{
+  "name": "authorization",
+  "version": "1.0.0",
+  "description": "User authentication and authorization",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev" : "nodemon src/index.js"
+  },
+  "author": "smit vadhiya",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.0",
+    "express": "^4.18.1",
+    "joi": "^17.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.3.2",
+    "nodemon": "^2.0.16",
+    "passport": "^0.5.2"
+  }
+}
