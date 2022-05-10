@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon src/index.js"
+    "dev": "nodemon --delay 1 src/index.js"
   },
   "author": "smit vadhiya",
   "license": "ISC",
@@ -17,10 +17,12 @@
     "http-status": "^1.5.2",
     "joi": "^17.6.0",
     "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.3",
     "mongoose": "^6.3.2",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.16",
     "passport": "^0.5.2",
+    "passport-jwt": "^4.0.0",
     "winston": "^3.7.2"
   }
 }

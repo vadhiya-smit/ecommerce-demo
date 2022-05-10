@@ -1,18 +1,27 @@
-const { User } = require("../models");
+const { genrateAuthToken } = require("../services/token.services");
 const userservice = require("../services/user.services");
 const catchAsync = require("../utils/catchAsync");
 
 const getUsers = catchAsync(async (req, res) => {
-    var users = await userservice.getUsers()
+    const users = await userservice.getUsers()
     res.send(users)
 })
 
 const createUser = catchAsync(async (req,res) => {
-    var user = await userservice.createUser(req.body)
+    const user = await userservice.createUser(req.body)
     res.send(user)
 })
 
+const getUser = catchAsync(async (req,res) => {
+    const user =  await userservice.getUserById(req.params.id)
+    genrateAuthToken(user)
+    res.send(user)
+})
+
+
+
 module.exports = {
     getUsers,
-    createUser
+    createUser,
+    getUser
 }
