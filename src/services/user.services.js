@@ -1,28 +1,33 @@
 const httpStatus = require("http-status")
-const { User } = require("../models")
+const { Users } = require("../models")
 const ApiError = require("../utils/ApiError")
 
 const getUsers = async () => {
-    const users = await User.find()
+    const users = await Users.find()
     return users
 }   
 
 const getUserById = async (id) => {
-    const user = await User.findById(id)
+    const user = await Users.findById(id)
     if(!user)
         throw new ApiError(httpStatus.NOT_FOUND, "User not found with id")
     return user
 }
 
 const createUser = async (body) => {
-    if(await User.isEmailTaken(body.email))
+    if(await Users.isEmailTaken(body.email))
         throw new ApiError(httpStatus.BAD_REQUEST, "Email id already taken")
-    return await User.create(body) 
+    return await Users.create(body) 
 }
+
+
+
+
 
 
 module.exports = {
     getUsers,
     getUserById,
-    createUser
+    createUser,
+    
 }

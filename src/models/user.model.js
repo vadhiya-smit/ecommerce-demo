@@ -1,5 +1,6 @@
 const { Schema, model } = require("mongoose");
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
+const toJSON = require("./plugins/toJSON.plugin");
 
   
 const userSchema = new Schema({
@@ -23,21 +24,20 @@ const userSchema = new Schema({
 },
     {
         timestamps: true,
-    
-        toJSON : {
-            transform : function(doc, ret){
-                ret.id = ret._id.toString()
-                delete ret._id
-                delete ret.__v
-                delete ret.createdAt
-                delete ret.password
-                delete ret.updatedAt
+        // toJSON : {
+        //     transform : function(doc, ret){
+        //         ret.id = ret._id.toString()
+        //         delete ret._id
+        //         delete ret.__v
+        //         delete ret.createdAt
+        //         delete ret.password
+        //         delete ret.updatedAt
                 
-            }
-        }
+        //     }
+        // }
     })
 
-//userSchema.plugin(toJSON)
+userSchema.plugin(toJSON)
 
 userSchema.statics.isEmailTaken = async function (email) {
     const user = await this.findOne({ email: email })
