@@ -1,4 +1,4 @@
-const { genrateAuthToken } = require("../services/token.services");
+const httpStatus = require("http-status");
 const userservice = require("../services/user.services");
 const catchAsync = require("../utils/catchAsync");
 
@@ -14,8 +14,17 @@ const createUser = catchAsync(async (req,res) => {
 
 const getUser = catchAsync(async (req,res) => {
     const user =  await userservice.getUserById(req.params.id)
-    genrateAuthToken(user)
     res.send(user)
+})
+
+const updateUser = catchAsync(async (req,res) => {
+    const updatedUser = await userservice.updateUser(req.params.id, req.body)
+    res.send(updatedUser)
+})
+
+const deleteUser = catchAsync(async (req,res) => {
+    const updatedUser = await userservice.deleteUser(req.params.id)
+    res.status(httpStatus.NO_CONTENT).send(updatedUser)
 })
 
 
@@ -23,5 +32,7 @@ const getUser = catchAsync(async (req,res) => {
 module.exports = {
     getUsers,
     createUser,
-    getUser
+    getUser,
+    updateUser,
+    deleteUser
 }

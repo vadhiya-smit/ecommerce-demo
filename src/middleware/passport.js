@@ -4,7 +4,19 @@ const config = require("../config/config");
 const tokenTypes = require("../config/token");
 const { getUserById } = require("../services/user.services");
 const ApiError = require("../utils/ApiError");
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
+function extractProfile(profile) {
+    let imageUrl = "";
+    if (profile.photos && profile.photos.length) {
+        imageUrl = profile.photos[0].value;
+    }
+    return {
+        id: profile.id,
+        displayName: profile.displayName,
+        image: imageUrl,
+    };
+}
 
 const jwtOptions = {
     secretOrKey: config.jwt.secrateKey,
@@ -16,8 +28,8 @@ const jwtVerify = async (payload, cb) => {
         if (payload.type !== tokenTypes.ACCESS)
             throw new ApiError(httpStatus.UNAUTHORIZED, "Invalid token type")
         const user = await getUserById(payload.user)
-        if (!user) 
-           return cb(null, false)
+        if (!user)
+            return cb(null, false)
         cb(null, user)
     } catch (error) {
         cb(error, false)
@@ -26,6 +38,21 @@ const jwtVerify = async (payload, cb) => {
 
 const jwtStretegy = new Strategy(jwtOptions, jwtVerify)
 
+const googleConfig = {
+    clientID: config.google.clientId,
+    clientSecret: config.google.secrate,
+    callbackURL: config.google.redirect,
+    userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+}
+
+const googleVerify = (accessToken, refreshToken, profile, cb) => {
+    console.log(accessToken, refreshToken)
+    cb(null, extractProfile(profile));
+}
+
+const googleStretegy = new GoogleStrategy(googleConfig,googleVerify)
+
 module.exports = {
-    jwtStretegy
+    jwtStretegy,
+    googleStretegy
 }
