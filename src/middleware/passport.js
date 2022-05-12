@@ -7,14 +7,16 @@ const ApiError = require("../utils/ApiError");
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 function extractProfile(profile) {
+    //console.log(profile)
     let imageUrl = "";
     if (profile.photos && profile.photos.length) {
         imageUrl = profile.photos[0].value;
     }
     return {
         id: profile.id,
-        displayName: profile.displayName,
+        name: profile.displayName,
         image: imageUrl,
+        email : profile.emails[0].value
     };
 }
 
@@ -42,11 +44,12 @@ const googleConfig = {
     clientID: config.google.clientId,
     clientSecret: config.google.secrate,
     callbackURL: config.google.redirect,
-    userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+    //userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo",
+    passReqToCallback   : true
 }
 
-const googleVerify = (accessToken, refreshToken, profile, cb) => {
-    console.log(accessToken, refreshToken)
+const googleVerify = (request, accessToken, refreshToken, profile, cb) => {
+    //console.log(accessToken, refreshToken)
     cb(null, extractProfile(profile));
 }
 

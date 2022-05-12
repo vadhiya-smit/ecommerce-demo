@@ -41,6 +41,21 @@ const deleteUser = async (id) => {
 }
 
 
+const createAuthUser = async (userData) => {
+    const { email, name } = userData
+    const user = await Users.findOne({ email: email })
+    if (!user) {
+        //Users.schema.path("password").validate(() => true)
+        const response = await new Users({
+            
+            email,
+            name,
+        })
+        const newUser = await response.save({validateBeforeSave : false})
+        return newUser
+    }
+    return user
+}
 
 
 
@@ -50,5 +65,6 @@ module.exports = {
     getUserById,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    createAuthUser
 }

@@ -3,6 +3,7 @@ const userservice = require("../services/user.services");
 const catchAsync = require("../utils/catchAsync");
 
 const getUsers = catchAsync(async (req, res) => {
+    console.log(req.isAuthenticated())
     const users = await userservice.getUsers()
     res.send(users)
 })
