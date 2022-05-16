@@ -5,15 +5,21 @@ const auth = require("../../middleware/auth")
 const validate = require("../../middleware/validate")
 const router = express.Router()
 
+const isLogin = (req,res,next) => {
+    console.log(req.user)
+    console.log(req.isAuthenticated())
+    next()
+}
+
 router
     .route("/")
-    .get(userController.getUsers)
+    .get(isLogin,userController.getUsers)
     .post(validate(createUserSchema),userController.createUser)
 
 router
     .route("/:id")
     .get(validate(getUserSchema),userController.getUser)
     .patch(validate(updateUserSchema),userController.updateUser)
-    .delete(validate(deleteUserSchema),userController.deleteUser)
+    .delete(validate(deleteUserSchema),userController.deleteUser)   
 
 module.exports = router

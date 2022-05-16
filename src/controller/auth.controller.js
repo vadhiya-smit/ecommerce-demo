@@ -16,6 +16,12 @@ const login = catchAsync(async (req,res) => {
     res.send({user, tokens})
 })
 
+const googleLogin = catchAsync(async (req,res) => {
+    var user = await userService.createAuthUser(req.body)
+    var tokens = await tokenService.genrateAuthToken(user)
+    res.send({user, tokens})
+})
+
 const logout = catchAsync(async (req,res) => {
     await authService.logout(req.body.refreshToken)
     res.status(httpStatus.NO_CONTENT).send()
@@ -58,5 +64,6 @@ module.exports = {
     forgotPassword,
     resetPassword,
     googleCallback,
-    googleAuth
+    googleAuth,
+    googleLogin
 }

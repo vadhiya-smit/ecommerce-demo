@@ -14,8 +14,11 @@ router.route("/forgot-password").post(validate(forgotPasswordSchema),authControl
 router.route("/reset-password").post(validate(resetPasswordSchema),authController.resetPassword)
 
 
-//router.route("/google/auth").get(googleAuth(),authController.googleAuth)
-router.route("/google/callback").get(googleAuth(),authController.googleCallback)
+router.route("/google/auth").get(googleAuth(),authController.googleAuth)
+//router.route("/google/callback").get(googleAuth(),authController.googleCallback)
+router.route("/google/callback").get(passport.authenticate("google", {session : ["profile", "email"]}),authController.googleCallback)
+
+router.route("/google/login").post(authController.googleLogin)
 
 
 module.exports = router
