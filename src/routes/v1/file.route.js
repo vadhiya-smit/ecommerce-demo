@@ -5,6 +5,6 @@ const router = express.Router()
 
 router.route("/").get(fileController.getFiles)
 
-router.route("/upload").post(upload.single("files"),fileController.uploadFiles)
+router.route("/upload").post(upload.array   ("files"),fileController.uploadFiles)
 
 module.exports = router

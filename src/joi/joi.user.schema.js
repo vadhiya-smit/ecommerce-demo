@@ -11,7 +11,7 @@ const createUserSchema = {
         name: Joi.string().required().min(3),
         email: Joi.string().required().email(),
         password: Joi.string().required().min(7).custom(password),
-        role: Joi.string().required().valid(...roles)
+        role: Joi.string().valid(...roles)
     })
 }
 

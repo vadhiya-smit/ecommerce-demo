@@ -11,6 +11,10 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
+    image : {
+        type : Schema.Types.ObjectId,
+        ref : "files"
+    },
     email: {
         type: String,
         required: true
@@ -36,6 +40,26 @@ const userSchema = new Schema({
     })
 
 userSchema.plugin(toJSON)
+
+
+function populateImage(next){
+    this.pupulate("image")
+    next()
+}
+
+userSchema.pre("findOne",function(next){
+    this.populate("image")
+    next()
+})
+userSchema.pre("find",function(next){
+    this.populate("image")
+    next()
+})
+
+userSchema.pre("save",function(next){
+    this.populate("image")
+    next()
+})
 
 userSchema.statics.isEmailTaken = async function (email) {
     const user = await this.findOne({ email: email })

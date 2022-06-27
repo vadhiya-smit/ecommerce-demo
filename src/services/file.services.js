@@ -2,6 +2,7 @@ const { Files } = require("../models")
 const sharp = require("sharp")
 const path = require("path")
 const fs = require("fs")
+const pick = require("../utils/pick")
 
 const getFiles = async () => {
     const files = await Files.find()
@@ -9,20 +10,17 @@ const getFiles = async () => {
 }
 
 const uploadFile = async (req) => {
-    
+  
     if (req.files) {
-        req.files.map(async item => {
-            const { filename: image } = item;
-            await sharp(item.path)
-                //.resize(200, 200)
-                .jpeg({ quality: 50 })
-                .toFile(
-                    path.resolve(item.destination, "thumbs", "thumb_" + image)
-                )
-        })
+
         const data = req.files.map(item => {
             const { filename: image } = item;
-
+            
+            sharp(item.path)
+               .jpeg({ quality: 30 })
+               .toFile(
+                   path.resolve(item.destination, "thumbs", "thumb_" + image)
+               )
             return {
                 file : {
                     filename: image,
@@ -35,13 +33,12 @@ const uploadFile = async (req) => {
                 }
             }
         })
-        const response = await Files.create(await data)
+        const response = await Files.create(data)
         return response
     } else {
         const { filename: image } = req.file;
         await sharp(req.file.path)
-        //.resize(200, 200)
-        .jpeg({ quality: 50 })
+        .jpeg({ quality: 30 })
         .toFile(
             path.resolve(req.file.destination, "thumbs", "thumb_" + image)
         )
@@ -49,19 +46,15 @@ const uploadFile = async (req) => {
             file : {
                 filename: image,
                 path: req.file.path,
-
             },
             thumbnail : {
                 filename: "thumb_" + image,
                 path: "uploads/thumbs/" + "thumb_" + image
             }
         }
-        const response = await Files.create(await data)
+        const response = await Files.create(data)
         return response
     }
-
-    //console.log(await data)
-    return response
 }
 
 module.exports = {
